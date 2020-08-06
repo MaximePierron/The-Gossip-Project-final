@@ -1,6 +1,6 @@
-## The Gossip Project final version
+# The Gossip Project final version
 
-Pour tester le projet, il ne faudra pas oublier de faire dans l'ordre :
+## Pour tester le projet, il ne faudra pas oublier de faire dans l'ordre :
 * `bundle install`
 * `rails db:drop`
 * `rails db:create`
@@ -9,7 +9,7 @@ Pour tester le projet, il ne faudra pas oublier de faire dans l'ordre :
 * `rails server`
 * Puis il te suffit d'aller sur [http://localhost:3000/](http://localhost:3000/)
 
-# Page Welcome réactive
+## Page Welcome réactive
 Pour la page welcome, il te suffit d'entrer directement son URL avec votre nom. Par exemple, si vous voulez tester pour un utilisateur qui s'appelle Barnabé :  
 
 [http://localhost:3000/welcome/Barnabé](http://localhost:3000/welcome/Barnabé)
