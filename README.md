@@ -1,4 +1,4 @@
-#The Gossip Project final version
+## The Gossip Project final version
 
 Pour tester le projet, il ne faudra pas oublier de faire dans l'ordre :
 * `bundle install`
