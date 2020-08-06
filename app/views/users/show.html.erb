@@ -1,0 +1,23 @@
+<!-- On inclus le contenu dans un row et une colonne pour limiter la largeur -->
+<div class="row">
+  <div class="col-6 mx-auto">
+
+    <h3 class="card-title text-center m-4"><%= "#{@user.first_name} #{@user.last_name}" %></h3>
+
+    <!-- Sa description -->
+    <p class="text-center"><em><%= @user.description %></em></p>
+
+    <ul class="list-group-flush">
+      <!-- Son email -->
+      <li class="list-group-item"><%= "Email : #{@user.email}" %></li>
+      <!-- Sa ville -->
+      <li class="list-group-item">Ville : <%= link_to @user.city.name, city_path(@user.city.id) %></li>
+      <!-- Son age -->
+      <li class="list-group-item"><%= "Age : #{@user.age}" %></li>
+      <!-- La date de son inscription -->
+      <li class="list-group-item"><%= "Inscris le : #{@user.created_at}" %></li>
+    </ul>
+
+  </div>
+</div>
+

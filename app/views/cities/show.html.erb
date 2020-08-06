@@ -1,0 +1,57 @@
+<!-- le contenu dans un row et une colonne pour limiter la largeur -->
+<div class="container">
+  <div class="row">
+    <div class="col-6 mx-auto">
+
+      <h3 class="card-title text-center m-4"><%= "Les potins à #{@city.name}" %></h3>
+
+      <div class="list-group col mx-auto">
+        <% @city_gossips.each do |gossip| %> <!-- défini dans cities_controller, array qui contient tous les potins de la ville concernée -->
+
+        <div class="row justify-content-center">
+          <%= link_to gossip_path(gossip.id), class: "list-group-item list-group-item-action mb-0 col-9 mb-3" do %>
+          <div class="row">
+            <div class="col-9">
+              <h5 class="mb-1"><%= gossip.title %></h5>
+              <small><%= "de #{gossip.user.first_name} #{gossip.user.last_name}" %></small>
+            </div>
+            <div class="col-3 text-right">
+
+              <!-- dans le badge le nombre de commentaires avec .count -->
+              <small>Commentaires : </small><span class="badge badge-primary badge-pill"> <%= gossip.comments.count %></span>
+            </div>
+          </div>
+          <% end %>
+          
+          <!-- ########### likes ########### -->
+          <small class="card border-muted ml-1 col-2 text-center p-3 mb-3">
+
+            <!-- Si un utilisateur est connecté, on affiche les boutons like / unlike -->
+            <% if current_user %>
+            <!-- Si la personne connectée a déjà like alors on affiche "unlike" -->
+            <% if Like.where(user: current_user, gossip: gossip).count != 0 %>
+
+          <%= link_to "J'aime pas !",
+          gossip_like_path(controller: :like,
+            action: :destroy,
+            gossip_id: gossip.id,
+            id: Like.where(user: current_user, gossip: gossip)[0].id),
+            method: "DELETE" %>
+            <% else %>
+
+            <!-- Dans le cas autre on propose de create un like dans la convention CRUD -->
+            <%= link_to "J'aime !", gossip_likes_path(controller: :likes, action: :create, gossip_id: gossip.id), method: "post" %>
+            <% end %>
+            <% end  %>
+            <!-- On affiche un coeur et le nombre de likes -->
+            ❤<br/>
+            <%= gossip.likes.count %> 
+          </small>
+        </div>
+
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,122 @@
+<!-- contenu dans un row et une colonne pour limiter la largeur -->
+<div class="container">
+	<div class="row">
+		<div class="col-6 mx-auto">
+
+			<!-- Titre du gossip -->
+			<h2 class="card-title text-center m-4">	<%= @gossip.title %></h2>
+
+			<!-- ########### partie du gossip ########### -->
+
+			<div class="row justify-content-md-center mb-2">
+				<div class="col">
+					<div class="card">
+						<div class="card-body text-center">
+
+							<!-- contenu du gossip -->
+
+							<p class="card-title lead">	<%= @gossip.content %></p>
+
+							<!-- date de création du gossip -->
+
+							<small class="card-text text-muted"><%= @gossip.created_at %></small>
+
+							<!-- auteur du gossip -->
+
+							<!-- On affiche l'auteur sous forme de lien pour pouvoir accéder à sa page.
+							Le lien permet d'accéder à la page auteur avec son ID en paramètre dans
+							l'URL -->
+							<p class="card-text text-muted">
+							Auteur : <%= link_to "#{@gossip.user.first_name} #{@gossip.user.last_name}", user_path(@gossip.user.id) %> (de <%= link_to @gossip.user.city.name, city_path(@gossip.user.city.id) %>)
+							</p>
+
+							<!-- si la personne connectée a écrit le gossip elle a accès aux options d'edit -->
+
+							<% if @gossip.user == current_user %>
+								<%= link_to "Modifier le potin", edit_gossip_path, class: "btn btn-primary" %> <%= link_to "Effacer le potin", gossip_path, data: {confirm: "Etes-vous sûr-e?"}, method: "delete", class: "btn btn-danger mb-0 ml-2" %>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- ########### card Like ########### -->
+
+			<small class="card border-muted col-12 text-center p-1 mb-4 ">
+
+				<!-- Si user est connecté, on affiche les boutons like / unlike -->
+
+				<% if current_user %>
+
+					<!-- Si user a déjà like le gossip, on affiche le bouton unlike -->
+
+					<% if Like.where(user: current_user, gossip: @gossip).count != 0 %>
+
+						<!-- Un user ne peut aimer un gossip qu'une fois donc where avec en arguments
+						le user en question et le gossip en question ne peut retourner qu'un array d'un
+						seul élément -->
+
+						<%= link_to "J'aime pas !",
+						gossip_like_path(controller: :like,
+													action: :destroy,
+													gossip_id: @gossip.id,
+													id: Like.where(user: current_user, gossip: @gossip)[0].id),
+													method: "DELETE" %>
+					
+					<!-- Si l'user n'a pas like le gossip, on affiche le bouton like -->
+
+					<% else %>
+						<%= link_to "J'aime !", gossip_likes_path(controller: :likes, action: :create, gossip_id: @gossip.id), method: "post" %>
+					<% end %>
+
+				<% end  %>
+
+				<!-- On affiche un coeur et le nombre de likes -->
+
+				❤<br/>
+				<%= @gossip.likes.count %> 
+			</small>
+
+
+			<!-- ########### Commentaires du gossip ########### -->
+
+			<h5 class="text-center">Commentaires</h5>
+
+			<!-- Formulaire de commentaire -->
+			<%= form_tag gossip_comments_path(controller: :comments, action: :create, gossip_id: @gossip.id), method: "post" do %>
+
+				<%= label_tag 'Texte' %>
+				<%= text_area_tag 'content', @comment.content, class: "form-control" %>
+				<br/>
+		
+				<%= submit_tag "Ajouter un commentaire", class: "btn btn-primary mb-5" %> 
+			<% end %>
+
+			<!-- On récupère les commentaires et on les affiche -->
+
+			<div class="list-group mx-auto">
+
+				<% @gossip.comments.reverse.each do |comment| %>
+
+				<div class="list-group-item mb-2">
+					<div class="row">
+						<div class="col-9">
+							<p class="mb-1"><%= comment.content %></p>
+
+							<!-- On affiche le nom de l'utilisateur qui a écrit le commentaire -->
+							<small>
+								de <%= "#{comment.user.first_name} #{comment.user.last_name}" %>
+							</small>
+						</div>
+						<div class="col-3 text-right">
+							<small><%= link_to "Modifier", edit_gossip_comment_path(@gossip.id, comment.id) %></small>
+						</div>
+					</div>
+				</div>
+
+				<% end %>
+			</div>
+
+		</div>
+	</div>
+</div>
